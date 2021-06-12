@@ -1,4 +1,5 @@
 ﻿using System;
+using Extras;
 using Physics;
 using UnityEngine;
 
@@ -36,6 +37,12 @@ namespace Physics
             playerRigidbody.isKinematic = false;
             playerRigidbody.AddForce(launchForceMagnitude * cannonHead.up);
             isStoringPlayer = false;
+        }
+
+        protected override void ProcessConfigMode(Vector2 mousePosInWorldSpace)
+        {
+            Vector3 newUp = mousePosInWorldSpace.ToVector3() - cannonHead.transform.position;
+            cannonHead.up = newUp.SetAxis('z', 0f);
         }
     }
 }

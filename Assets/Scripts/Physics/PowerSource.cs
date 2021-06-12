@@ -9,7 +9,12 @@ namespace Physics
 
         protected override void OnPhysicsPoll()
         {
+            ;
+        }
 
+        protected override void ProcessConfigMode(Vector2 mousePosInWorldSpace)
+        {
+            ;
         }
 
         [ContextMenu(nameof(DetermineConnectedSources))]
