@@ -8,8 +8,6 @@ namespace Physics
         [Header("Puller Properties")]
         [SerializeField] private float influenceRadius = 3f;
         [SerializeField] private float forceMagnitude = 3f;
-        
-        private Collider2D[] affectedColliders = new Collider2D[5];
 
         protected override void OnDrawGizmosSelected()
         {
@@ -19,13 +17,17 @@ namespace Physics
 
         protected override void OnPhysicsPoll()
         {
-            int colliderCount = Physics2D.OverlapCircleNonAlloc(this.transform.position, influenceRadius,
-                affectedColliders, affectedLayerMask);
-            for (int i = 0; i < colliderCount; ++i)
+            Collider2D[] affectedColliders = Physics2D.OverlapCircleAll(this.transform.position, influenceRadius, affectedLayerMask);
+            for (int i = 0; i < affectedColliders.Length; ++i)
             {
                 affectedColliders[i].attachedRigidbody.AddForce(
                     forceMagnitude * (this.transform.position - affectedColliders[i].transform.position).normalized);
             }
+        }
+
+        protected override void ProcessConfigMode(Vector2 mousePosInWorldSpace)
+        {
+            this.transform.position= Vector2.Lerp(this.transform.position, mousePosInWorldSpace, 0.75f);
         }
     }
 }

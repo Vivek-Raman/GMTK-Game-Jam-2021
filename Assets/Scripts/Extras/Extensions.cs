@@ -34,5 +34,33 @@ public static class Extensions
     {
         return b ? 1 : 0;
     }
+
+    /// <summary>
+    /// Sets a new value to a single axis of a Vector3.
+    /// </summary>
+    /// <param name="vector3">Vector whose axis value needs to be set.</param>
+    /// <param name="axis">Pick the axis whose value is to be changed. Must be 'x', 'y', or 'z'.</param>
+    /// <param name="newValue">Value to set to the axis.</param>
+    /// <returns>Vector with the new value.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when axis is not valid.</exception>
+    public static Vector3 SetAxis(this ref Vector3 vector3, char axis, float newValue)
+    {
+        switch (axis)
+        {
+            case 'x':
+                vector3.Set(newValue, vector3.y, vector3.z);
+                break;
+            case 'y':
+                vector3.Set(vector3.x, newValue, vector3.z);
+                break;
+            case 'z':
+                vector3.Set(vector3.x, vector3.y, newValue);
+                break;
+            default:
+                throw new System.ArgumentException($"Axis {axis} does not exist. Expected 'x', 'y', or 'z'.");
+        }
+
+        return vector3;
+    }
 }
 }
