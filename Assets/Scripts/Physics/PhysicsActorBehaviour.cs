@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using VFX;
 
 namespace Physics
 {
     public abstract class PhysicsActorBehaviour : MonoBehaviour
     {
+        public UnityAction pollPhysicsAction;
+
         public bool IsActive
         {
             get => isActive;
@@ -43,12 +46,13 @@ namespace Physics
                 PhysicsActorBehaviour actor = actorCollider.GetComponent<PhysicsActorBehaviour>();
                 if (actor == this || actor == Parent) continue;
                 if (actor.Parent != null) continue;
+                if (actor is PowerSource) continue;
                 actor.IsActive = true;
                 actor.Parent = this;
                 connectedActors.Add(actor);
                 connectedPowerSource.physicsPollAction += actor.OnPhysicsPoll;
                 actor.DetermineLinkedActors(ref powerSource);
-                actor.DrawConnectionLines();
+                actor.ProcessVFX();
             }
         }
 
@@ -69,7 +73,7 @@ namespace Physics
             connectedPowerSource.physicsPollAction -= OnPhysicsPoll;
             connectedActors.Clear();
             connectedPowerSource = null;
-            ClearConnectionLines();
+            ResetVFX();
         }
 
         #endregion
@@ -104,7 +108,7 @@ namespace Physics
 
         protected virtual void OnPhysicsPoll()
         {
-            Debug.Log($"{this.name} polls physics");
+            pollPhysicsAction?.Invoke();
         }
 
         protected virtual void EnterConfigMode(Vector2 mousePosInWorldSpace)
@@ -119,20 +123,20 @@ namespace Physics
 
         #endregion
 
-        #region Visualize Connections
+        #region VFX
 
-        public void DrawConnectionLines()
+        public void ProcessVFX()
         {
-            VFXProcessor viz = this.GetComponentInChildren<VFXProcessor>();
-            if (viz == null) return;
-            viz.ProcessActorVFX(IsActive, connectedActors);
+            VFXProcessor vfx = this.GetComponentInChildren<VFXProcessor>();
+            if (vfx == null) return;
+            vfx.ProcessActorVFX(IsActive, this, connectedActors);
         }
 
-        public void ClearConnectionLines()
+        public void ResetVFX()
         {
-            VFXProcessor viz = this.GetComponentInChildren<VFXProcessor>();
-            if (viz == null) return;
-            viz.ResetVFX();
+            VFXProcessor vfx = this.GetComponentInChildren<VFXProcessor>();
+            if (vfx == null) return;
+            vfx.ResetVFX();
         }
 
         #endregion
