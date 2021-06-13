@@ -31,8 +31,9 @@ namespace Physics
             isStoringPlayer = true;
         }
 
-        protected override void OnPhysicsPoll()
+        public override void OnPhysicsPoll()
         {
+            base.OnPhysicsPoll();
             if (!isStoringPlayer) return;
             playerRigidbody.isKinematic = false;
             playerRigidbody.AddForce(launchForceMagnitude * cannonHead.up);

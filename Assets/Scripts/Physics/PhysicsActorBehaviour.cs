@@ -1,55 +1,38 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Physics
 {
     public abstract class PhysicsActorBehaviour : MonoBehaviour
     {
-        private const float PHYSICS_POLL_INTERVAL = 2f;
-
         public bool IsActive
         {
             get => isActive;
             set => isActive = value;
         }
-
         public PhysicsActorBehaviour Parent { get; set; } = null;
 
         [Header("Activation Properties")]
-        [SerializeField] private bool isActive = false;
         [SerializeField] private float activationRadius = 3f;
 
-        private List<PhysicsActorBehaviour> connectedActors = new List<PhysicsActorBehaviour>();
-        protected LayerMask affectedLayerMask = 1 << 6;
-        private LayerMask actorLayerMask = 1 << 8;
-        private Camera cam = null;
-        private bool isInConfigMode = false;
+        [HideInInspector] public List<PhysicsActorBehaviour> connectedActors = new List<PhysicsActorBehaviour>();
+        private bool isActive = false;
 
-        #region Process Physics
+        protected bool isInConfigMode = false;
+        private Camera cam = null;
+
+        protected readonly LayerMask affectedLayerMask = 1 << 6;
+        private readonly LayerMask actorLayerMask = 1 << 8;
 
         protected virtual void Awake()
         {
-            StartCoroutine(nameof(PollPhysicsInteraction));
             cam = Camera.main;
         }
 
-        private IEnumerator PollPhysicsInteraction()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(PHYSICS_POLL_INTERVAL);
-                if (!isActive) continue;
-                OnPhysicsPoll();
-            }
-        }
-
-        #endregion
-
         #region Linking Power
 
-        public void DetermineLinkedActors()
+        public void DetermineLinkedActors(ref UnityAction physicsPollAction)
         {
             if (!isActive) return;
             Collider2D[] nearbyActors = Physics2D.OverlapCircleAll(this.transform.position, activationRadius, actorLayerMask);
@@ -58,21 +41,24 @@ namespace Physics
             {
                 PhysicsActorBehaviour actor = actorCollider.GetComponent<PhysicsActorBehaviour>();
                 if (actor == this || actor == Parent) continue;
+                if (actor.Parent != null) continue;
                 actor.IsActive = true;
                 actor.Parent = this;
                 connectedActors.Add(actor);
-                actor.DetermineLinkedActors();
+                physicsPollAction += actor.OnPhysicsPoll;
+                actor.DetermineLinkedActors(ref physicsPollAction);
             }
         }
 
         #endregion
-
+        
         #region Configuration
 
         public void OnMouseDrag()
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            Vector2 mousePosInWorldSpace = Physics2D.Raycast(ray.origin, ray.direction, 50f, 1 << 7).point;
+            Vector2 mousePosInWorldSpace = Physics2D.Raycast
+                (ray.origin, ray.direction, 50f, 1 << 7).point;
 
             if (!isInConfigMode)
             {
@@ -94,7 +80,9 @@ namespace Physics
 
         #region OVERRIDES
 
-        protected abstract void OnPhysicsPoll();
+        public virtual void OnPhysicsPoll()
+        {
+        }
 
         protected virtual void EnterConfigMode(Vector2 mousePosInWorldSpace)
         {
