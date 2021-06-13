@@ -15,7 +15,7 @@ namespace Physics
             Gizmos.DrawWireSphere(this.transform.position, influenceRadius);
         }
 
-        public override void OnPhysicsPoll()
+        protected override void OnPhysicsPoll()
         {
             base.OnPhysicsPoll();
             Collider2D[] affectedColliders = Physics2D.OverlapCircleAll(this.transform.position, influenceRadius, affectedLayerMask);
@@ -29,6 +29,18 @@ namespace Physics
         protected override void ProcessConfigMode(Vector2 mousePosInWorldSpace)
         {
             this.transform.position = Vector2.Lerp(this.transform.position, mousePosInWorldSpace, 0.75f);
+        }
+
+        protected override void ExitConfigMode(Vector2 mousePosInWorldSpace)
+        {
+            base.ExitConfigMode(mousePosInWorldSpace);
+            PowerSource[] sources = FindObjectsOfType<PowerSource>();
+            if (sources.Length <= 0) return;
+            foreach (PowerSource source in sources)
+            {
+                source.ResetActorConnections();
+                source.DetermineConnectedActors();
+            }
         }
     }
 }

@@ -8,15 +8,13 @@ namespace Physics
     {
         public UnityAction physicsPollAction;
 
+        private PowerSource me = null;
+
         protected override void Awake()
         {
             base.Awake();
-            IsActive = true;
-        }
-
-        public override void OnPhysicsPoll()
-        {
-            Debug.Log($"{this.name} polls physics");
+            me = this;
+            DetermineConnectedActors();
         }
 
         protected override void ProcessConfigMode(Vector2 mousePosInWorldSpace)
@@ -33,7 +31,13 @@ namespace Physics
         [ContextMenu(nameof(DetermineConnectedActors))]
         public void DetermineConnectedActors()
         {
-            DetermineLinkedActors(ref physicsPollAction);
+            IsActive = true;
+            DetermineLinkedActors(ref me);
+        }
+
+        public void ResetActorConnections()
+        {
+            ResetConnections();
         }
     }
 }
