@@ -17,13 +17,14 @@ namespace Physics
             ;
         }
 
-        [ContextMenu(nameof(DetermineConnectedSources))]
-        public void DetermineConnectedSources()
+        [ContextMenu(nameof(DetermineConnectedActors))]
+        public void DetermineConnectedActors()
         {
-            foreach (PhysicsActorBehaviour actor in connectedNodes)
-            {
-                allPhysicsActors.UnionWith(actor.connectedNodes);
-            }
+            DetermineLinkedActors();
+            // foreach (PhysicsActorBehaviour actor in connectedActors)
+            // {
+            //     allPhysicsActors.UnionWith(actor.connectedActors);
+            // }
         }
     }
 }

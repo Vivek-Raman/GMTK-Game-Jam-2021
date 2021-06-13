@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1776702709598909448}
   - component: {fileID: 5842580189205753057}
   - component: {fileID: 5278239030051960900}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,11 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09328ae358d4c178c110c60ce1cb1ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 1
   connectedNodes: []
-  affectedLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
+  isActive: 0
+  activationRadius: 3
   launchForceMagnitude: 200
 --- !u!61 &5278239030051960900
 BoxCollider2D:
@@ -88,7 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3935280674987982394}
   - component: {fileID: 16688392419125888}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 656918261281691865}
   - component: {fileID: 8761952956265571752}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +249,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6341911619604187438}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cannon Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,11 +263,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8586632898213561873}
-  m_LocalRotation: {x: -0, y: -0, z: -0.41567165, w: 0.9095148}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 656918261281691865}
   m_Father: {fileID: 1776702709598909448}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -49.123}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
