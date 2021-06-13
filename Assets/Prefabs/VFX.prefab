@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectionVFX: {fileID: 1566490474649434315}
   activationVFX: {fileID: 9012463221950184997}
+  pollingVFX: {fileID: 0}
 --- !u!120 &1566490474649434315
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -190,8 +191,8 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
-  prewarm: 0
-  playOnAwake: 1
+  prewarm: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 0

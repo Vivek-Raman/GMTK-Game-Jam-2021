@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Physics
 {
@@ -33,13 +34,21 @@ namespace Physics
 
         protected override void ExitConfigMode(Vector2 mousePosInWorldSpace)
         {
-            base.ExitConfigMode(mousePosInWorldSpace);
-            PowerSource[] sources = FindObjectsOfType<PowerSource>();
-            if (sources.Length <= 0) return;
-            foreach (PowerSource source in sources)
+            try
             {
-                source.ResetActorConnections();
-                source.DetermineConnectedActors();
+                base.ExitConfigMode(mousePosInWorldSpace);
+                PowerSource[] sources = FindObjectsOfType<PowerSource>();
+                if (sources.Length <= 0) return;
+                foreach (PowerSource source in sources)
+                {
+                    source.ResetActorConnections();
+                    source.DetermineConnectedActors();
+                }
+            }
+            catch (StackOverflowException e)
+            {
+                Debug.LogError(e);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
     }

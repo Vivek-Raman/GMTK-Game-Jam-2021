@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +15,10 @@ namespace Physics
         {
             base.Awake();
             me = this;
+        }
+
+        private void Start()
+        {
             DetermineConnectedActors();
         }
 
@@ -32,11 +37,13 @@ namespace Physics
         public void DetermineConnectedActors()
         {
             IsActive = true;
+            ProcessVFX();
             DetermineLinkedActors(ref me);
         }
 
         public void ResetActorConnections()
         {
+            ResetVFX();
             ResetConnections();
         }
     }
