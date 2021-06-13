@@ -4936,7 +4936,7 @@ MonoBehaviour:
   activationRadius: 3
   connectedActors: []
   influenceRadius: 3
-  forceMagnitude: 25
+  forceMagnitude: 40
 --- !u!1 &6560107070770372491
 GameObject:
   m_ObjectHideFlags: 0
