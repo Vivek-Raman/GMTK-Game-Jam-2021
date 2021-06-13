@@ -31,7 +31,7 @@ namespace Physics
             isStoringPlayer = true;
         }
 
-        public override void OnPhysicsPoll()
+        protected override void OnPhysicsPoll()
         {
             base.OnPhysicsPoll();
             if (!isStoringPlayer) return;

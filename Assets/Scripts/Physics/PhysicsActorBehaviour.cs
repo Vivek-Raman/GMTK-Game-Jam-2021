@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using VFX;
 
 namespace Physics
 {
@@ -18,7 +18,7 @@ namespace Physics
 
         [HideInInspector] public List<PhysicsActorBehaviour> connectedActors = new List<PhysicsActorBehaviour>();
         private bool isActive = false;
-
+        protected PowerSource connectedPowerSource = null;
         protected bool isInConfigMode = false;
         private Camera cam = null;
 
@@ -32,9 +32,10 @@ namespace Physics
 
         #region Linking Power
 
-        public void DetermineLinkedActors(ref UnityAction physicsPollAction)
+        protected void DetermineLinkedActors(ref PowerSource powerSource)
         {
             if (!isActive) return;
+            connectedPowerSource = powerSource;
             Collider2D[] nearbyActors = Physics2D.OverlapCircleAll(this.transform.position, activationRadius, actorLayerMask);
             if (nearbyActors.Length < 1) return;
             foreach (Collider2D actorCollider in nearbyActors)
@@ -45,9 +46,30 @@ namespace Physics
                 actor.IsActive = true;
                 actor.Parent = this;
                 connectedActors.Add(actor);
-                physicsPollAction += actor.OnPhysicsPoll;
-                actor.DetermineLinkedActors(ref physicsPollAction);
+                connectedPowerSource.physicsPollAction += actor.OnPhysicsPoll;
+                actor.DetermineLinkedActors(ref powerSource);
+                actor.DrawConnectionLines();
             }
+        }
+
+        protected void ResetConnections()
+        {
+            if (connectedActors.Count > 0)
+            {
+                foreach (PhysicsActorBehaviour actor in connectedActors)
+                {
+                    if (actor == Parent) continue;
+                    if (actor == this) continue;
+                    actor.ResetConnections();
+                }
+            }
+
+            IsActive = false;
+            Parent = null;
+            connectedPowerSource.physicsPollAction -= OnPhysicsPoll;
+            connectedActors.Clear();
+            connectedPowerSource = null;
+            ClearConnectionLines();
         }
 
         #endregion
@@ -80,8 +102,9 @@ namespace Physics
 
         #region OVERRIDES
 
-        public virtual void OnPhysicsPoll()
+        protected virtual void OnPhysicsPoll()
         {
+            Debug.Log($"{this.name} polls physics");
         }
 
         protected virtual void EnterConfigMode(Vector2 mousePosInWorldSpace)
@@ -96,9 +119,27 @@ namespace Physics
 
         #endregion
 
+        #region Visualize Connections
+
+        public void DrawConnectionLines()
+        {
+            LineVisualizer viz = this.GetComponentInChildren<LineVisualizer>();
+            if (viz == null) return;
+            viz.DetermineLinePoints(connectedActors);
+        }
+
+        public void ClearConnectionLines()
+        {
+            LineVisualizer viz = this.GetComponentInChildren<LineVisualizer>();
+            if (viz == null) return;
+            viz.ClearLinePoints();
+        }
+
+        #endregion
+
         #region Editor Only - Visualize Connections
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected virtual void OnDrawGizmosSelected()
         {
             if (isActive) Gizmos.color = Color.green;
@@ -109,7 +150,7 @@ namespace Physics
                 Gizmos.DrawLine(this.transform.position, actor.transform.position);
             }
         }
-        #endif
+#endif
 
         #endregion
     }
