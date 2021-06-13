@@ -123,16 +123,16 @@ namespace Physics
 
         public void DrawConnectionLines()
         {
-            LineVisualizer viz = this.GetComponentInChildren<LineVisualizer>();
+            VFXProcessor viz = this.GetComponentInChildren<VFXProcessor>();
             if (viz == null) return;
-            viz.DetermineLinePoints(connectedActors);
+            viz.ProcessActorVFX(IsActive, connectedActors);
         }
 
         public void ClearConnectionLines()
         {
-            LineVisualizer viz = this.GetComponentInChildren<LineVisualizer>();
+            VFXProcessor viz = this.GetComponentInChildren<VFXProcessor>();
             if (viz == null) return;
-            viz.ClearLinePoints();
+            viz.ResetVFX();
         }
 
         #endregion
