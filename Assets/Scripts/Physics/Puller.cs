@@ -15,8 +15,9 @@ namespace Physics
             Gizmos.DrawWireSphere(this.transform.position, influenceRadius);
         }
 
-        protected override void OnPhysicsPoll()
+        public override void OnPhysicsPoll()
         {
+            base.OnPhysicsPoll();
             Collider2D[] affectedColliders = Physics2D.OverlapCircleAll(this.transform.position, influenceRadius, affectedLayerMask);
             for (int i = 0; i < affectedColliders.Length; ++i)
             {

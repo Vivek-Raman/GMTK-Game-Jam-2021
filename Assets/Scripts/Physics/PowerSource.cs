@@ -1,15 +1,22 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Physics
 {
     public class PowerSource : PhysicsActorBehaviour
     {
-        private HashSet<PhysicsActorBehaviour> allPhysicsActors = new HashSet<PhysicsActorBehaviour>();
+        public UnityAction physicsPollAction;
 
-        protected override void OnPhysicsPoll()
+        protected override void Awake()
         {
-            ;
+            base.Awake();
+            IsActive = true;
+        }
+
+        public override void OnPhysicsPoll()
+        {
+            Debug.Log($"{this.name} polls physics");
         }
 
         protected override void ProcessConfigMode(Vector2 mousePosInWorldSpace)
@@ -17,14 +24,16 @@ namespace Physics
             ;
         }
 
+        private void OnMouseDown()
+        {
+            if (isInConfigMode) return;
+            physicsPollAction?.Invoke();
+        }
+
         [ContextMenu(nameof(DetermineConnectedActors))]
         public void DetermineConnectedActors()
         {
-            DetermineLinkedActors();
-            // foreach (PhysicsActorBehaviour actor in connectedActors)
-            // {
-            //     allPhysicsActors.UnionWith(actor.connectedActors);
-            // }
+            DetermineLinkedActors(ref physicsPollAction);
         }
     }
 }
