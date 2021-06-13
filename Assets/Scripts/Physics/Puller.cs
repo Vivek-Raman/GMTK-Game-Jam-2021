@@ -10,11 +10,13 @@ namespace Physics
         [SerializeField] private float influenceRadius = 3f;
         [SerializeField] private float forceMagnitude = 3f;
 
+#if UNITY_EDITOR
         protected override void OnDrawGizmosSelected()
         {
             base.OnDrawGizmosSelected();
             Gizmos.DrawWireSphere(this.transform.position, influenceRadius);
         }
+#endif
 
         protected override void OnPhysicsPoll()
         {

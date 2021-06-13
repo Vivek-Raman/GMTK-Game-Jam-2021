@@ -13,5 +13,10 @@ namespace Utils.SceneNavigation
         {
             SceneManager.LoadScene((int) nextScene);
         }
+
+        public void UI_Quit()
+        {
+            Application.Quit();
+        }
     }
 }

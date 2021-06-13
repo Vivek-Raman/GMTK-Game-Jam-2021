@@ -37,8 +37,8 @@ namespace Physics
         public void DetermineConnectedActors()
         {
             IsActive = true;
-            ProcessVFX();
             DetermineLinkedActors(ref me);
+            ProcessVFX();
         }
 
         public void ResetActorConnections()
