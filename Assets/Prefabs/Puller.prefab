@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6560107070132422054}
   - component: {fileID: 6560107070132422049}
   - component: {fileID: 3636235962924598275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Puller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,11 +61,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aff8d1418f5540d7b8a2665d8385d37a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 1
   connectedNodes: []
-  affectedLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
+  isActive: 0
+  activationRadius: 3
   influenceRadius: 3
   forceMagnitude: 25
 --- !u!1 &6560107070770372491
@@ -78,7 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6560107070770372488}
   - component: {fileID: 6560107070770372489}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

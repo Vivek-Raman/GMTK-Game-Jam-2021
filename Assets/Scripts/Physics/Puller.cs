@@ -27,7 +27,7 @@ namespace Physics
 
         protected override void ProcessConfigMode(Vector2 mousePosInWorldSpace)
         {
-            this.transform.position= Vector2.Lerp(this.transform.position, mousePosInWorldSpace, 0.75f);
+            this.transform.position = Vector2.Lerp(this.transform.position, mousePosInWorldSpace, 0.75f);
         }
     }
 }

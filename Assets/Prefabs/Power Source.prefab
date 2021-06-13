@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4698075869913468528}
   - component: {fileID: 4698075869913468531}
   - component: {fileID: 963154015862827874}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Power Source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,6 +72,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedNodes: []
+  isActive: 1
+  activationRadius: 3
 --- !u!1 &4698075870729363872
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4698075870729363873}
   - component: {fileID: 4698075870729363902}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
